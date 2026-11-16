@@ -284,6 +284,10 @@ export default function PreguntasJava({ onBack }) {
   const cachedTranslation = translations.get(originalQuestion);
 
   useEffect(() => {
+    return () => window.speechSynthesis?.cancel();
+  }, [originalQuestion, selectedCategory, isFinished]);
+
+  useEffect(() => {
     if (language !== "es" || !originalQuestion || isFinished || cachedTranslation) {
       return;
     }
@@ -336,8 +340,8 @@ export default function PreguntasJava({ onBack }) {
 
   const activeError =
     language === "es" &&
-    !activeTranslation &&
-    translationError?.question === originalQuestion
+      !activeTranslation &&
+      translationError?.question === originalQuestion
       ? translationError
       : null;
 
@@ -364,6 +368,30 @@ export default function PreguntasJava({ onBack }) {
   function changeCategory(event) {
     setSelectedCategory(event.target.value);
     restartQuiz();
+  }
+
+  function listenToQuestion() {
+    const text = originalQuestion?.question?.trim();
+    if (!text) return;
+
+    const synthesis = window.speechSynthesis;
+
+    if (!synthesis || typeof window.SpeechSynthesisUtterance !== "function") {
+      window.alert("Este navegador no admite la lectura en voz alta.");
+      return;
+    }
+
+    const utterance = new window.SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.9;
+
+    utterance.onerror = ({ error }) => {
+      if (error === "canceled" || error === "interrupted") return;
+      window.alert("No se pudo reproducir la pregunta en inglés.");
+    };
+
+    synthesis.cancel();
+    synthesis.speak(utterance);
   }
 
   function toggleTranslation() {
@@ -502,14 +530,34 @@ export default function PreguntasJava({ onBack }) {
               {originalQuestion.category && (
                 <span style={styles.category}>{originalQuestion.category}</span>
               )}
-              <button
-                type="button"
-                style={styles.button}
-                onClick={toggleTranslation}
-                lang={language === "en" ? "es" : "en"}
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "flex-end",
+                  gap: 8,
+                  marginLeft: "auto",
+                }}
               >
-                {language === "en" ? "Traducir al español" : "Show in English"}
-              </button>
+                <button
+                  type="button"
+                  style={styles.button}
+                  onClick={toggleTranslation}
+                  lang={language === "en" ? "es" : "en"}
+                >
+                  {language === "en" ? "Traducir al español" : "Show in English"}
+                </button>
+
+                <button
+                  type="button"
+                  style={styles.button}
+                  onClick={listenToQuestion}
+                  lang="es"
+                >
+                  🔊 Escuchar en inglés
+                </button>
+              </div>
             </div>
 
             {isTranslating && (
