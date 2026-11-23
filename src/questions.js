@@ -4941,7 +4941,501 @@ List<Integer> result = numbers.stream()
 
 System.out.println(numbers); // [1, 2, 3]
 System.out.println(result);  // [2, 3]`,
-  }
+  },
+  {
+  id: "java-reverse-string",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    'Create a program that reverses a text string without using built-in functions that reverse it automatically. For example, "Hola mundo" should return "odnum aloH". Complete the missing code.',
+  codeParts: [
+    `/*
+ * Crea un programa que invierta el orden de una cadena de texto
+ * sin usar funciones propias del lenguaje que lo hagan automáticamente.
+ * Si le pasamos "Hola mundo", retornará "odnum aloH".
+ */
+
+String texto = "Hola mundo";
+String resultado = "";
+
+for (int i = texto.`,
+    `() - 1; i >= 0; i`,
+    `) {
+    resultado += texto.`,
+    `(i);
+}
+
+System.out.println(resultado);`,
+  ],
+  answers: ["length", "--", "charAt"],
+  expectedOutput: "odnum aloH",
+  explanation:
+    "length() returns the number of characters. The loop starts at the last index and moves backwards using i--. charAt(i) reads each character and appends it to resultado.",
+},
+{
+  id: "java-count-words",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    "Create a program that counts how many times each word appears and displays the final count. Ignore punctuation and treat uppercase and lowercase words as equal. Complete the missing code.",
+  codeParts: [
+    `/*
+ * CONTANDO PALABRAS
+ *
+ * Crea un programa que cuente cuántas veces se repite cada palabra
+ * y que muestre el recuento final de todas ellas.
+ * Los signos de puntuación no forman parte de la palabra.
+ * Una palabra es la misma aunque aparezca en mayúsculas y minúsculas.
+ * No se pueden utilizar funciones propias del lenguaje que
+ * resuelvan automáticamente el recuento.
+ *
+ * Oración de ejemplo: "Hola, mundo. ¡Hola, Java! JAVA."
+ */
+
+String texto = "Hola, mundo. ¡Hola, Java! JAVA.";
+java.util.Map<String, Integer> conteo = new java.util.LinkedHashMap<>();
+String palabra = "";
+
+for (int i = 0; i <= texto.length(); i++) {
+    // El espacio final permite contar la última palabra.
+    char caracter = i < texto.length() ? texto.charAt(i) : ' ';
+
+    if (Character.`,
+    `(caracter)) {
+        palabra += Character.`,
+    `(caracter);
+    } else if (!palabra.isEmpty()) {
+        int cantidad = conteo.`,
+    `(palabra, 0);
+        conteo.`,
+    `(palabra, cantidad + 1);
+        palabra = "";
+    }
+}
+
+for (java.util.Map.Entry<String, Integer> entrada : conteo.entrySet()) {
+    System.out.println(entrada.getKey() + ": " + entrada.getValue());
+}`,
+  ],
+  answers: ["isLetterOrDigit", "toLowerCase", "getOrDefault", "put"],
+  expectedOutput: `hola: 2
+mundo: 1
+java: 2`,
+  explanation:
+    "isLetterOrDigit() identifies characters belonging to a word. toLowerCase() normalizes uppercase and lowercase characters. Each separator ends the current word. getOrDefault() retrieves its previous count, and put() stores that count plus one. LinkedHashMap preserves the order in which words first appear.",
+},
+{
+  id: "java-prime-fibonacci-even",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    "Complete the missing conditions and statements to determine whether a number is prime, belongs to the Fibonacci sequence, and is even or odd.",
+  codeParts: [
+    `/*
+ * PRIMO, FIBONACCI Y PAR
+ *
+ * Escribe un programa que, dado un número, compruebe y muestre
+ * si es primo, pertenece a Fibonacci y es par o impar.
+ *
+ * Ejemplos:
+ * 2 es primo, es fibonacci y es par
+ * 7 es primo, no es fibonacci y es impar
+ *
+ * Completa condiciones y sentencias completas.
+ */
+
+int numero = 7;
+
+// Un número primo es mayor que 1.
+boolean esPrimo = `,
+    `;
+
+for (int divisor = 2; divisor <= numero / divisor; divisor++) {
+    if (`,
+    `) {
+        esPrimo = false;
+        break;
+    }
+}
+
+// Generamos Fibonacci hasta alcanzar o superar el número.
+long anterior = 0;
+long actual = 1;
+
+while (`,
+    `) {
+    `,
+    `
+    anterior = actual;
+    actual = siguiente;
+}
+
+boolean esFibonacci = `,
+    `;
+
+// Comprobamos si el número es par.
+boolean esPar = `,
+    `;
+
+System.out.println(
+    numero
+    + (esPrimo ? " es primo" : " no es primo")
+    + (esFibonacci ? ", es fibonacci" : ", no es fibonacci")
+    + (esPar ? " y es par" : " y es impar")
+);`,
+  ],
+  answers: [
+    "numero > 1",
+    "numero % divisor == 0",
+    "actual < numero",
+    "long siguiente = anterior + actual;",
+    "numero == 0 || actual == numero",
+    "numero % 2 == 0",
+  ],
+  expectedOutput: "7 es primo, no es fibonacci y es impar",
+  explanation:
+    "numero > 1 excludes numbers that cannot be prime. numero % divisor == 0 detects a divisor. The Fibonacci loop continues while actual < numero and calculates each next term by adding the previous two. The final comparison checks Fibonacci membership, including zero. numero % 2 == 0 identifies even numbers.",
+},
+{
+  id: "java-roman-numerals",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    "Complete the missing conditions and statements to convert an integer from 1 to 3999 into Roman numerals. For example, 14 becomes XIV and 2024 becomes MMXXIV.",
+  codeParts: [
+    `/*
+ * NÚMEROS ROMANOS
+ *
+ * Crea un programa que convierta un número entero del 1 al 3999
+ * a su representación en números romanos.
+ *
+ * Ejemplos:
+ * 14   → XIV
+ * 2024 → MMXXIV
+ *
+ * Incluye los casos de resta:
+ * IV = 4, IX = 9, XL = 40, XC = 90,
+ * CD = 400 y CM = 900.
+ *
+ * Completa condiciones y sentencias completas.
+ */
+
+int numero = 2024;
+
+if (`,
+    `) {
+    throw new IllegalArgumentException("El número debe estar entre 1 y 3999.");
+}
+
+int[] valores = {
+    1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1
+};
+
+String[] simbolos = {
+    "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"
+};
+
+String resultado = "";
+
+for (`,
+    `) {
+    while (`,
+    `) {
+        `,
+    `
+        `,
+    `
+    }
+}
+
+System.out.println(resultado);`,
+  ],
+  answers: [
+    "numero < 1 || numero > 3999",
+    "int i = 0; i < valores.length; i++",
+    "numero >= valores[i]",
+    "resultado += simbolos[i];",
+    "numero -= valores[i];",
+  ],
+  expectedOutput: "MMXXIV",
+  explanation:
+    "The first condition rejects numbers outside the supported range. The for loop visits values from largest to smallest. The while condition checks whether the current value fits into the remaining number. Each iteration appends its Roman symbol and subtracts its value. For 2024, the result is M + M + X + X + IV.",
+},
+{
+  id: "java-sort-array",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    'Complete a function that sorts and returns an array of numbers. Use "Asc" for ascending order or "Desc" for descending order, without built-in sorting functions.',
+  codeParts: [
+    `/*
+ * ORDENA LA LISTA
+ *
+ * Crea una función que ordene y retorne un array de números.
+ * Recibirá un listado y un parámetro "Asc" o "Desc".
+ * "Asc" ordena de menor a mayor.
+ * "Desc" ordena de mayor a menor.
+ * No se pueden utilizar funciones que ordenen automáticamente.
+ *
+ * Ejemplo:
+ * Entrada: [8, 2, 9, 4, 6]
+ * Asc: [2, 4, 6, 8, 9]
+ * Desc: [9, 8, 6, 4, 2]
+ */
+
+public class Main {
+    static int[] ordenar(int[] numeros, String orden) {
+        if (!"Asc".equals(orden) && !"Desc".equals(orden)) {
+            throw new IllegalArgumentException("Usa Asc o Desc.");
+        }
+
+        boolean ascendente = "Asc".equals(orden);
+
+        for (int i = 0; i < numeros.length - 1; i++) {
+            for (int j = 0; j < numeros.length - 1 - i; j++) {
+                boolean intercambiar = ascendente
+                    ? numeros[j] `,
+    ` numeros[j + 1]
+                    : numeros[j] `,
+    ` numeros[j + 1];
+
+                if (intercambiar) {
+                    int temporal = numeros[j];
+                    numeros[j] = numeros[`,
+    `];
+                    numeros[j + 1] = `,
+    `;
+                }
+            }
+        }
+
+        return `,
+    `;
+    }
+
+    public static void main(String[] args) {
+        int[] numeros = {8, 2, 9, 4, 6};
+        int[] resultado = ordenar(numeros, "Asc");
+
+        // toString() solo muestra el array.
+        System.out.println(java.util.Arrays.toString(resultado));
+    }
+}`,
+  ],
+  answers: [">", "<", "j + 1", "temporal", "numeros"],
+  expectedOutput: "[2, 4, 6, 8, 9]",
+  explanation:
+    "Bubble sort compares adjacent elements and swaps them when they are in the wrong order. Ascending order uses >, while descending order uses <. The temporal variable preserves a value during the swap. Each pass places one element in its final position. The function modifies and returns the original array.",
+},
+{
+  id: "java-http-api-call",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    "Complete an HTTP GET request to PokéAPI using Java HttpClient. Display the HTTP status code and response body in the terminal.",
+  codeParts: [
+    `/*
+ * LA API (APPLICATION PROGRAMMING INTERFACE)
+ *
+ * Implementa una llamada HTTP a una API y muestra
+ * su resultado a través de la terminal.
+ *
+ * Consultaremos los datos del Pokémon Pikachu.
+ * URL: https://pokeapi.co/api/v2/pokemon/pikachu
+ *
+ * Requiere Java 11 o superior y conexión a internet.
+ */
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        HttpClient cliente = HttpClient.newHttpClient();
+
+        HttpRequest peticion = HttpRequest.newBuilder()
+            .uri(URI.`,
+    `("https://pokeapi.co/api/v2/pokemon/pikachu"))
+            .timeout(Duration.ofSeconds(15))
+            .`,
+    `()
+            .build();
+
+        try {
+            HttpResponse<String> respuesta = cliente.`,
+    `(
+                peticion,
+                HttpResponse.BodyHandlers.`,
+    `()
+            );
+
+            System.out.println("HTTP: " + respuesta.`,
+    `());
+            System.out.println(respuesta.`,
+    `());
+        } catch (InterruptedException error) {
+            Thread.currentThread().interrupt();
+            System.err.println("La petición fue interrumpida.");
+        } catch (IOException error) {
+            System.err.println("Error de comunicación: " + error.getMessage());
+        }
+    }
+}`,
+  ],
+  answers: ["create", "GET", "send", "ofString", "statusCode", "body"],
+  explanation:
+    "URI.create() creates the resource URI. GET() selects the HTTP method. send() performs the request and waits for the response. BodyHandlers.ofString() reads the response body as text. statusCode() returns the HTTP status, and body() returns the response content. InterruptedException handling restores the interrupt flag.",
+},
+{
+  id: "java-url-parameters",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    'Complete a function that extracts query parameter values from a URL without using URL parsing utilities. For example, "?year=2023&challenge=0" should return ["2023", "0"].',
+  codeParts: [
+    `/*
+ * PARÁMETROS URL
+ *
+ * Dada una URL con parámetros, crea una función
+ * que obtenga sus valores.
+ * No uses funciones que extraigan los parámetros automáticamente.
+ *
+ * Ejemplo:
+ * https://retosdeprogramacion.com?year=2023&challenge=0
+ * Resultado: [2023, 0]
+ *
+ * Conserva los valores tal como aparecen en la URL.
+ */
+
+public class Main {
+    static java.util.List<String> obtenerValores(String url) {
+        java.util.List<String> valores = new java.util.ArrayList<>();
+        boolean enConsulta = false;
+        boolean leyendoValor = false;
+        String valor = "";
+
+        for (int i = 0; i < url.length(); i++) {
+            char caracter = url.charAt(i);
+
+            // El fragmento de la URL termina la consulta.
+            if (caracter == '#') {
+                break;
+            }
+
+            if (!enConsulta) {
+                if (caracter == `,
+    `) {
+                    enConsulta = true;
+                }
+            } else if (caracter == '&') {
+                if (leyendoValor) {
+                    valores.`,
+    `(valor);
+                }
+
+                valor = "";
+                leyendoValor = false;
+            } else if (caracter == '=' && !leyendoValor) {
+                leyendoValor = `,
+    `;
+            } else if (leyendoValor) {
+                valor `,
+    ` caracter;
+            }
+        }
+
+        // Guarda el último valor, aunque no termine con &.
+        if (leyendoValor) {
+            valores.add(`,
+    `);
+        }
+
+        return valores;
+    }
+
+    public static void main(String[] args) {
+        String url =
+            "https://retosdeprogramacion.com?year=2023&challenge=0";
+
+        System.out.println(obtenerValores(url));
+    }
+}`,
+  ],
+  answers: ["'?'","add", "true", "+=", "valor"],
+  expectedOutput: "[2023, 0]",
+  explanation:
+    "The ? character starts the query. The first = in each parameter starts its value, and & separates parameters. Each completed value is added to the list. The final value is saved after the loop, and # marks the start of a fragment. Empty values are preserved, parameters without = are skipped, and encoded values remain unchanged.",
+},
+{
+  id: "java-two-sum",
+  type: "complete-code",
+  category: "Practice",
+  question:
+    "Complete a function that returns the indices of two numbers whose sum equals the target. Do not use the same element twice. Return an empty array if no pair exists.",
+  codeParts: [
+    `/*
+ * DOS NÚMEROS QUE SUMAN UN OBJETIVO — TWO SUM
+ *
+ * Dado un array de enteros y un número objetivo,
+ * devuelve los índices de dos elementos que sumen ese objetivo.
+ *
+ * No puedes utilizar el mismo elemento dos veces.
+ * Si no existe una pareja, devuelve un array vacío.
+ * Si hay varias parejas, puedes devolver cualquiera.
+ *
+ * Ejemplo:
+ * Números: [2, 7, 11, 15]
+ * Objetivo: 9
+ * Resultado: [0, 1], porque 2 + 7 = 9.
+ */
+
+public class Main {
+    static int[] encontrarPareja(int[] numeros, int objetivo) {
+        java.util.Map<Integer, Integer> vistos = new java.util.HashMap<>();
+
+        for (int i = 0; i < numeros.length; i++) {
+            int complemento = `,
+    `;
+
+            if (`,
+    `) {
+                return `,
+    `;
+            }
+
+            `,
+    `
+        }
+
+        return `,
+    `;
+    }
+
+    public static void main(String[] args) {
+        int[] numeros = {2, 7, 11, 15};
+        int objetivo = 9;
+
+        int[] resultado = encontrarPareja(numeros, objetivo);
+
+        System.out.println(java.util.Arrays.toString(resultado));
+    }
+}`,
+  ],
+  answers: [
+    "objetivo - numeros[i]",
+    "vistos.containsKey(complemento)",
+    "new int[] {vistos.get(complemento), i}",
+    "vistos.put(numeros[i], i);",
+    "new int[0]",
+  ],
+  expectedOutput: "[0, 1]",
+  explanation:
+    "For each number, calculate the complement needed to reach the target. The HashMap stores previously visited numbers and their indices. If the complement exists, return its index and the current index. Checking before inserting prevents using the same element twice and supports duplicates such as [3, 3] with target 6. Average time complexity is O(n), with O(n) extra space. This example assumes complement subtraction fits in an int.",
+},
 
 );
 
